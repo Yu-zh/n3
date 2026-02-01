@@ -168,7 +168,7 @@ fn Work::has_ready(self : Work) -> Bool {
 
 ///|
 fn Work::log(self : Work, msg : String) -> Unit {
-  debug_log(msg)
+  log_debug(msg)
 }
 
 ///|

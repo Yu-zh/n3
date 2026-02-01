@@ -38,8 +38,10 @@ async fn parse_ninja_file(
 
 ///|
 fn parse_bytes(input : Bytes) -> Array[Statement] raise {
-  let parser = Parser::new(input)
-  parser.parse()
+  @tracing.scope("parse.bytes", fn() {
+    let parser = Parser::new(input)
+    parser.parse()
+  })
 }
 
 ///|

@@ -1,5 +1,6 @@
 ///|
 /// n3 - A Ninja build system implementation in MoonBit
 async fn main {
-  guard @n3.run() is 0
+  let code = @n3.run(@env.args())
+  guard code is 0
 }

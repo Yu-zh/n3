@@ -1,6 +1,7 @@
 import {
   "Yu-zh/n3",
   "moonbitlang/async",
+  "moonbitlang/core/env",
 }
 
 options(
