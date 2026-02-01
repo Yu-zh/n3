@@ -31,8 +31,20 @@ fn Runner::start(
 ) -> Unit {
   self.running += 1
   group.spawn_bg(fn() {
-    let result = @process.run(build.cmdline.unwrap(), [])
+    let cmdline = match build.cmdline {
+      Some(cmd) => cmd
+      None => "<none>"
+    }
+    debug_log(
+      "run build " + build_id_to_string(id) + " cmd=" + cmdline,
+    )
+    let result = @process.run("sh", ["-c", cmdline])
+    debug_log(
+      "run done build " + build_id_to_string(id) + " result=" +
+      result.to_string(),
+    )
     self.results.put(FinishedTask::{ build_id: id, output: "", result })
+    debug_log("queued result build " + build_id_to_string(id))
   })
 }
 
