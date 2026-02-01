@@ -2,7 +2,7 @@
 package "Yu-zh/n3"
 
 // Values
-pub async fn run() -> Int
+pub async fn run(Array[String]) -> Int
 
 // Errors
 

@@ -1,5 +1,5 @@
 ///|
-pub enum LogLevel {
+priv enum LogLevel {
   Off
   Info
   Debug
@@ -14,12 +14,12 @@ priv struct LogState {
 let log_state : LogState = { level: Off }
 
 ///|
-pub fn set_log_level(level : LogLevel) -> Unit {
+fn set_log_level(level : LogLevel) -> Unit {
   log_state.level = level
 }
 
 ///|
-pub fn parse_log_level(value : String) -> LogLevel? {
+fn parse_log_level(value : String) -> LogLevel? {
   match value {
     "debug" => Some(Debug)
     "info" => Some(Info)
