@@ -1,22 +1,22 @@
 ///|
 /// One token within an EvalString, either literal text or a variable reference
-pub enum EvalPart {
+priv enum EvalPart {
   Literal(String)
   VarRef(String)
 }
 
 ///|
 /// A parsed but unexpanded variable-reference string, e.g. "cc $in -o $out"
-pub(all) struct EvalString {
+priv struct EvalString {
   parts : Array[EvalPart]
 }
 
 ///|
 fn is_var_char(c : Byte) -> Bool {
   (c >= b'a' && c <= b'z') ||
-    (c >= b'A' && c <= b'Z') ||
-    (c >= b'0' && c <= b'9') ||
-    c == b'_'
+  (c >= b'A' && c <= b'Z') ||
+  (c >= b'0' && c <= b'9') ||
+  c == b'_'
 }
 
 ///|
@@ -82,13 +82,13 @@ fn EvalString::from_bytes(input : Bytes) -> EvalString {
 
 ///|
 /// Environment trait for looking up variables
-pub trait Env {
+priv trait Env {
   get_var(Self, String) -> String?
 }
 
 ///|
 /// Evaluate the EvalString by looking up variables in the provided environments
-pub fn EvalString::evaluate(self : EvalString, envs : Array[&Env]) -> String {
+fn EvalString::evaluate(self : EvalString, envs : Array[&Env]) -> String {
   let mut result = ""
   for part in self.parts {
     match part {

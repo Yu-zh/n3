@@ -1,28 +1,28 @@
 ///|
 /// Id for File nodes in the Graph
-pub struct FileId(Int) derive(Eq, Hash, Show)
+priv struct FileId(Int) derive(Eq, Hash)
 
 ///|
 /// Id for Build nodes in the Graph
-pub struct BuildId(Int) derive(Eq, Hash, Show)
+priv struct BuildId(Int) derive(Eq, Hash)
 
 ///|
 /// A single file referenced as part of a build
-pub struct File {
-  name : String
+priv struct File {
+  _name : String
   mut input : BuildId? // The Build that generates this file, if any
   downstream : Array[BuildId] // Builds that depend on this file
 }
 
 ///|
-pub struct Build {
+priv struct Build {
   cmdline : String?
   ins : Array[FileId]
   outs : Array[FileId]
 }
 
 ///|
-pub struct Graph {
+priv struct Graph {
   builds : Map[BuildId, Build]
   file_by_id : Map[FileId, File]
   file_by_name : Map[String, FileId]
@@ -35,7 +35,7 @@ fn Graph::get_file_id(self : Graph, name : String) -> FileId {
     None => {
       let id : FileId = self.file_by_id.length()
       self.file_by_name.set(name, id)
-      self.file_by_id.set(id, File::{ name, input: None, downstream: [] })
+      self.file_by_id.set(id, File::{ _name: name, input: None, downstream: [] })
       id
     }
   }

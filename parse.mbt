@@ -1,13 +1,13 @@
 ///|
 /// A rule definition in a ninja file
-pub struct RuleStmt {
+priv struct RuleStmt {
   name : Bytes
   vars : Map[Bytes, Bytes]
 } derive(Debug)
 
 ///|
 /// A build statement in a ninja file
-pub struct BuildStmt {
+priv struct BuildStmt {
   rule : Bytes
   outs : Bytes
   ins : Bytes
@@ -16,7 +16,7 @@ pub struct BuildStmt {
 
 ///|
 /// Parsed statements from a ninja file
-pub enum Statement {
+priv enum Statement {
   RuleStmt(RuleStmt)
   BuildStmt(BuildStmt)
   Default(Array[Bytes])
@@ -24,13 +24,12 @@ pub enum Statement {
 
 ///|
 /// Parser for .ninja files
-pub struct Parser {
+priv struct Parser {
   mut source : BytesView
-  eval_buf : Array[EvalPart]
 }
 
 ///|
-pub async fn parse_ninja_file(
+async fn parse_ninja_file(
   filename? : String = "build.ninja",
 ) -> Array[Statement] {
   let content = @fs.read_file(filename)
@@ -46,7 +45,7 @@ fn parse_bytes(input : Bytes) -> Array[Statement] raise {
 ///|
 /// Create a new parser
 fn Parser::new(text : Bytes) -> Parser {
-  { source: text, eval_buf: [] }
+  { source: text }
 }
 
 ///|

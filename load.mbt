@@ -1,6 +1,6 @@
 ///|
 /// Worker that parses .ninja files and constructs the graph
-pub struct Loader {
+priv struct Loader {
   graph : Graph
   default : Array[FileId]
   rules : Map[Bytes, Map[String, EvalString]]
@@ -8,7 +8,7 @@ pub struct Loader {
 
 ///|
 /// Result of the loader's work
-pub struct State {
+priv struct State {
   graph : Graph
   default : Array[FileId]
 }

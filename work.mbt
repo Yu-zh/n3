@@ -1,6 +1,6 @@
 ///|
 /// Build states go through this sequence
-pub enum BuildState {
+priv enum BuildState {
   Unknown // Default initial state
   Want // We want to ensure it's up to date but its dependencies are not yet ready
   Ready // Dependencies are up to date, ready to check whether it's dirty
@@ -8,11 +8,11 @@ pub enum BuildState {
   Running // Currently executing
   Done // Already up to date (not dirty) or finished successfully
   // Failed // Finished but failed
-} derive(Eq, Show)
+} derive(Eq)
 
 ///|
 /// Work coordinates the build execution
-pub struct Work {
+priv struct Work {
   graph : Graph
   // TODO: build_states can be optimized to fixedarray
   build_states : Map[BuildId, BuildState]
