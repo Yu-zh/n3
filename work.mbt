@@ -32,7 +32,9 @@ fn Work::new(graph : Graph) -> Work {
 ///|
 fn Work::set(self : Work, build_id : BuildId, state : BuildState) -> Unit {
   self.log(
-    "set build " + build_id_to_string(build_id) + " -> " +
+    "set build " +
+    build_id_to_string(build_id) +
+    " -> " +
     build_state_to_string(state),
   )
   if self.build_states.get(build_id) is Some(Unknown) && state == Ready {
@@ -47,7 +49,9 @@ fn Work::want_build(self : Work, build_id : BuildId) -> BuildState raise {
   guard self.graph.builds.get(build_id) is Some(build)
   guard self.build_states.get(build_id) is Some(state)
   self.log(
-    "want_build " + build_id_to_string(build_id) + " state=" +
+    "want_build " +
+    build_id_to_string(build_id) +
+    " state=" +
     build_state_to_string(state),
   )
   if state != Unknown {
@@ -70,9 +74,7 @@ fn Work::want_file(self : Work, file_id : FileId) -> Bool raise {
   guard self.graph.file_by_id.get(file_id) is Some(file) else {
     fail("unknown file id")
   }
-  self.log(
-    "want_file " + file_id_to_string(file_id) + " name=" + file._name,
-  )
+  self.log("want_file " + file_id_to_string(file_id) + " name=" + file._name)
   if file.input is Some(build_id) {
     self.want_build(build_id) is Done
   } else {
@@ -87,7 +89,9 @@ async fn Work::run(self : Work) -> Int {
   @async.with_task_group(tg => {
     while self.has_ready() || runner.running > 0 {
       self.log(
-        "loop ready=" + self.ready_queue.length().to_string() + " running=" +
+        "loop ready=" +
+        self.ready_queue.length().to_string() +
+        " running=" +
         runner.running.to_string(),
       )
       while runner.can_run() {
@@ -101,7 +105,9 @@ async fn Work::run(self : Work) -> Int {
               None => "<none>"
             }
             self.log(
-              "start build " + build_id_to_string(ready_build) + " cmd=" +
+              "start build " +
+              build_id_to_string(ready_build) +
+              " cmd=" +
               cmdline,
             )
             runner.start(tg, ready_build, build)
@@ -111,8 +117,10 @@ async fn Work::run(self : Work) -> Int {
       self.log("waiting for result; running=" + runner.running.to_string())
       let finished = runner.wait()
       self.log(
-        "finished build " + build_id_to_string(finished.build_id) +
-        " result=" + finished.result.to_string(),
+        "finished build " +
+        build_id_to_string(finished.build_id) +
+        " result=" +
+        finished.result.to_string(),
       )
       self.set(finished.build_id, Done)
       guard finished.result is 0 else { return finished.result }

@@ -110,7 +110,7 @@ fn EvalString::evaluate(self : EvalString, envs : Array[&Env]) -> String {
 
 ///|
 /// Built-in variables for $in and $out in build statements
-pub struct BuildImplicitVars {
+priv struct BuildImplicitVars {
   ins : Array[String]
   outs : Array[String]
 }

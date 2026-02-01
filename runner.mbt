@@ -35,12 +35,12 @@ fn Runner::start(
       Some(cmd) => cmd
       None => "<none>"
     }
-    debug_log(
-      "run build " + build_id_to_string(id) + " cmd=" + cmdline,
-    )
+    debug_log("run build " + build_id_to_string(id) + " cmd=" + cmdline)
     let result = @process.run("sh", ["-c", cmdline])
     debug_log(
-      "run done build " + build_id_to_string(id) + " result=" +
+      "run done build " +
+      build_id_to_string(id) +
+      " result=" +
       result.to_string(),
     )
     self.results.put(FinishedTask::{ build_id: id, output: "", result })
