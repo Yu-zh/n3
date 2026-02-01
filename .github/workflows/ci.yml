@@ -17,7 +17,7 @@ jobs:
 
       - name: Check formatting
         run: |
-          moon fmt
+          NEW_MOON_PKG=1 moon fmt
           git diff --exit-code || (echo "Code is not formatted. Run 'moon fmt' and commit." && exit 1)
 
       - name: Check generated files

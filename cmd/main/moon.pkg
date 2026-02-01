@@ -1,0 +1,8 @@
+import {
+  "Yu-zh/n3",
+  "moonbitlang/async",
+}
+
+options(
+  "is-main": true,
+)
