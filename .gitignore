@@ -7,5 +7,4 @@ target
 .claude/
 n2/
 install-n2.sh
-tracing/
 .repos/
