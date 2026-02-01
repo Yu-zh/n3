@@ -21,7 +21,12 @@ priv struct Work {
 
 ///|
 fn Work::new(graph : Graph) -> Work {
-  { graph, build_states: Map::new(), ready_queue: @deque.Deque::new() }
+  let build_states = Map::new()
+  for p in graph.builds {
+    let (build_id, _) = p
+    build_states.set(build_id, Unknown)
+  }
+  { graph, build_states, ready_queue: @deque.Deque::new() }
 }
 
 ///|
