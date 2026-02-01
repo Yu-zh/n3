@@ -1,0 +1,62 @@
+# Example 4: Pools and Parallelism Control
+# This demonstrates how to control build parallelism with pools
+
+# Heavy pool - only 2 tasks at once (simulates resource-intensive builds)
+pool heavy_pool
+  depth = 2
+
+# Console pool - only 1 task at once (for interactive commands)
+pool console
+  depth = 1
+
+# Fast compilation rule (no pool restriction)
+rule fast_compile
+  command = echo "Fast compiling $in..." && sleep 0.5 && echo "Done: $in" > $out
+  description = Fast compile $in
+
+# Heavy compilation rule (limited by pool)
+rule heavy_compile
+  command = echo "Heavy compiling $in..." && sleep 2 && echo "Heavy result: $in" > $out
+  description = Heavy compile $in
+  pool = heavy_pool
+
+# Console interactive rule (sequential)
+rule interactive
+  command = echo "Interactive step for $in" && cat $in && echo "Result" > $out
+  description = Interactive $in
+  pool = console
+
+# Fast builds (can run many in parallel)
+build fast1.o: fast_compile |
+  in = fast1.c
+
+build fast2.o: fast_compile |
+  in = fast2.c
+
+build fast3.o: fast_compile |
+  in = fast3.c
+
+build fast4.o: fast_compile |
+  in = fast4.c
+
+# Heavy builds (only 2 concurrent due to pool)
+build heavy1.o: heavy_compile |
+  in = heavy1.c
+
+build heavy2.o: heavy_compile |
+  in = heavy2.c
+
+build heavy3.o: heavy_compile |
+  in = heavy3.c
+
+build heavy4.o: heavy_compile |
+  in = heavy4.c
+
+# Interactive builds (sequential due to console pool)
+build report1.txt: interactive fast1.o
+
+build report2.txt: interactive fast2.o
+
+build final_report.txt: interactive heavy1.o
+
+default fast1.o fast2.o fast3.o fast4.o heavy1.o heavy2.o heavy3.o heavy4.o report1.txt report2.txt final_report.txt

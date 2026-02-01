@@ -1,0 +1,48 @@
+# Example 6: Response Files (rspfile)
+# Demonstrates how to handle long command lines
+
+# Compile rule
+rule cc
+  command = gcc -Wall -O2 -c $in -o $out
+  description = Compiling $in
+
+# Archive rule - macOS ar doesn't support @file, so we use direct command
+# GNU ar (Linux) does support it, but for compatibility we use direct here
+rule archive
+  command = ar rcs $out $in
+  description = Archiving $out
+
+# Link rule - also uses response file
+rule link
+  command = gcc -o $out @$out.rsp
+  rspfile = $out.rsp
+  rspfile_content = $in -lm
+  description = Linking $out (via response file)
+
+# Alternative link rule WITHOUT response file (for comparison)
+rule link_direct
+  command = gcc -o $out $in -lm
+  description = Linking $out (direct command line)
+
+# Build object files
+build obj/math1.o: cc src/math1.c
+build obj/math2.o: cc src/math2.c
+build obj/math3.o: cc src/math3.c
+build obj/math4.o: cc src/math4.c
+build obj/math5.o: cc src/math5.c
+build obj/utils1.o: cc src/utils1.c
+build obj/utils2.o: cc src/utils2.c
+build obj/utils3.o: cc src/utils3.c
+build obj/main.o: cc src/main.c
+
+# Create static library using response file
+# With 100s of files, this prevents "Argument list too long" errors
+build libmath.a: archive obj/math1.o obj/math2.o obj/math3.o obj/math4.o obj/math5.o
+
+# Link final program using response file
+build program_rsp: link obj/main.o obj/utils1.o obj/utils2.o obj/utils3.o libmath.a
+
+# Link final program WITHOUT response file (for comparison)
+build program_direct: link_direct obj/main.o obj/utils1.o obj/utils2.o obj/utils3.o libmath.a
+
+default program_rsp

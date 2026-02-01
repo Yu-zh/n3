@@ -1,0 +1,20 @@
+# Example 1: Simple Hello World
+# This demonstrates basic ninja syntax with a simple shell command
+
+rule greet
+  command = echo "Hello from $name!" > $out
+  description = Greeting $name
+
+build hello.txt: greet
+  name = Ninja Build System
+
+build world.txt: greet
+  name = n2
+
+rule combine
+  command = cat $in > $out
+  description = Combining greetings
+
+build combined.txt: combine hello.txt world.txt
+
+default combined.txt

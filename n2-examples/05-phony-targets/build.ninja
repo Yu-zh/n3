@@ -1,0 +1,65 @@
+# Example 5: Phony Targets and Order-Only Dependencies
+# Demonstrates special targets and dependency types
+
+# Regular build rules
+rule generate
+  command = echo "$text" > $out
+  description = Generating $out
+
+rule process
+  command = cat $in | tr '[:lower:]' '[:upper:]' > $out
+  description = Processing $in
+
+rule combine
+  command = cat $in > $out
+  description = Combining files
+
+# Build some files
+build data1.txt: generate
+  text = hello world
+
+build data2.txt: generate
+  text = foo bar baz
+
+build data3.txt: generate
+  text = build system example
+
+# Process them
+build processed1.txt: process data1.txt
+build processed2.txt: process data2.txt
+build processed3.txt: process data3.txt
+
+# Combine processed files
+build result.txt: combine processed1.txt processed2.txt processed3.txt
+
+# Phony targets (virtual targets that group dependencies)
+build all: phony result.txt
+
+build clean: phony
+  command = rm -f data*.txt processed*.txt result.txt output_dir/.created
+  description = Cleaning build artifacts
+
+build data: phony data1.txt data2.txt data3.txt
+
+build processed: phony processed1.txt processed2.txt processed3.txt
+
+# Order-only dependencies example
+# The pipe | separates regular deps from order-only deps
+# Order-only deps must exist but their timestamps don't cause rebuilds
+
+# Create output directory marker
+build output_dir/.created: generate
+  text = directory created
+  command = mkdir -p output_dir && echo "created" > $out
+  description = Creating output directory
+
+# These files depend on directory existing (order-only)
+# but changing the directory timestamp won't cause rebuilds
+build output_dir/final1.txt: process data1.txt | output_dir/.created
+build output_dir/final2.txt: process data2.txt | output_dir/.created
+build output_dir/final3.txt: process data3.txt | output_dir/.created
+
+build outputs: phony output_dir/final1.txt output_dir/final2.txt output_dir/final3.txt
+
+# Default target
+default all

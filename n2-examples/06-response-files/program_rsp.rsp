@@ -1,0 +1,1 @@
+obj/main.o obj/utils1.o obj/utils2.o obj/utils3.o libmath.a -lm
