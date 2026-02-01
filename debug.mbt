@@ -1,5 +1,5 @@
 ///|
-let debug_enabled = true
+let debug_enabled = false
 
 ///|
 fn debug_log(msg : String) -> Unit {

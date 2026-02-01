@@ -6,7 +6,6 @@ target
 .moonagent/
 .claude/
 n2/
-n2-examples/
 install-n2.sh
 tracing/
 .repos/
